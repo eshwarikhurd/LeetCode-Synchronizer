@@ -102,14 +102,35 @@ def sync_github(commits, submissions):
         commit_message = f"LeetCode Synchronization - {submission['title']} ({submission['language']})"
         if commit_message not in commits or commits[commit_message] < submission["timestamp"]:
             dir_name = f"{str(submission['id']).zfill(4)}-{submission['title_slug']}"
-            if submission["language"] == "C++":
-                ext = "cpp"
-            elif submission["language"] == "MySQL":
-                ext = "sql"
-            elif submission["language"] == "Bash":
-                ext = "sh"
-            else:
+            language_extensions = {
+                "C++": "cpp",
+                "Java": "java",
+                "Python": "py",
+                "Python3": "py",
+                "C": "c",
+                "C#": "cs",
+                "JavaScript": "js",
+                "TypeScript": "ts",
+                "PHP": "php",
+                "Swift": "swift",
+                "Kotlin": "kt",
+                "Dart": "dart",
+                "Go": "go",
+                "Ruby": "rb",
+                "Scala": "scala",
+                "Rust": "rs",
+                "Racket": "rkt",
+                "Erlang": "erl",
+                "Elixir": "ex",
+                "MySQL": "sql",
+                "MS SQL Server": "sql",
+                "Oracle": "sql",
+                "PostgreSQL": "sql",
+                "Bash": "sh",
+            }
+            if submission["language"] not in language_extensions:
                 raise Exception(f"Unknown language : {submission['language']}")
+            ext = language_extensions[submission["language"]]
 
             pathlib.Path(f"problems/{dir_name}").mkdir(parents=True, exist_ok=True)
             with open(f"problems/{dir_name}/{dir_name}.{ext}", "wt") as fd:
